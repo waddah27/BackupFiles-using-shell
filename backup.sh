@@ -13,18 +13,18 @@ then
   exit
 fi
 
-# [TASK 1]
+# read the target and dest directories
 targetDirectory=$1
 destinationDirectory=$2
 
-# [TASK 2]
+# Print the directories
 echo "The target directory is: $1"
 echo "The destination directory is: $2"
 
-# [TASK 3]
+# initialize the current date in seconds
 currentTS=`date +%s`
 
-# [TASK 4]
+# initialize the backup file name
 backupFileName="backup-[$currentTS].tar.gz"
 
 # We're going to:
@@ -34,34 +34,35 @@ backupFileName="backup-[$currentTS].tar.gz"
 
 # To make things easier, we will define some useful variables...
 
-# [TASK 5]
+# read the present working directory
 origAbsPath=`pwd`
 
-# [TASK 6]
+# Navigate to the destination directory and read it
 cd $destinationDirectory # <-
 destDirAbsPath=`pwd`
 
-# [TASK 7]
+# Navigate to the target directory
 cd $origAbsPath # <-
 cd $targetDirectory # <-
 
-# [TASK 8]
+# compute the date range in seconds for new files to be backed up 
 yesterdayTS=$(($currentTS - 24*60*60))
 
+# Declare the backup array to store all files to be backed up
 declare -a toBackup
 
-for file in $(ls) # [TASK 9]
+for file in $(ls) # read files in the target directory
 do
-  # [TASK 10]
+  # Check for the recent downloaded files (24 hours ago)
   if [ `date -r $file +%s` -gt $yesterdayTS ]
   then
-    # [TASK 11]
+    # assign files to an array to backup them all in once
     toBackup+=($file)
   fi
 done
 
-# [TASK 12]
+# archive the files within the backup array array
 tar -czvf $backupFileName ${toBackup[@]}
-# [TASK 13]
+# move backup file to the destination directory
 mv $backupFileName $destDirAbsPath
-# Congratulations! You completed the final project for this course!
+
